@@ -23,7 +23,7 @@ http
     if (q.pathname.includes("documentation")) {
       filePath = __dirname + "/documentation.html";
     } else {
-      filePath = "index.html";
+      filePath = "index.js";
     }
 
     fs.readFile(filePath, (err, data) => {
