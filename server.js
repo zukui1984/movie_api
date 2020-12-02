@@ -20,8 +20,8 @@ http
       }
     );
 
-    if (q.pathname.includes("document")) {
-      filePath = __dirname + "/document.html";
+    if (q.pathname.includes("documentation")) {
+      filePath = __dirname + "/documentation.html";
     } else {
       filePath = "index.html";
     }
