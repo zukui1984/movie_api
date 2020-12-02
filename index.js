@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+morgan = require('morgan');
 
 let topMovies = [
   {
@@ -43,6 +44,7 @@ let requestTime = (req, res, next) => {
 
 app.use(topMovies);
 app.use(requestTime);
+app.use(morgan('public'));
 
 // listen for requests
 app.listen(8080, () =>{
