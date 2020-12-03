@@ -17,6 +17,9 @@ let topMovies = [
   }
 ];
 
+app.use(express.static('public'));
+app.use(morgan('public'));
+
 // GET requests
 app.get('/', (req, res) => {
   res.send('Welcome to my movie club!');
@@ -30,21 +33,7 @@ app.get('/movies', (req, res) => {
   res.json(topMovies);
 });
 
-app.use(express.static('public'));
 
-let topMovies = (req, res, next) => {
-  console.log(req.url);
-  next();
-};
-
-let requestTime = (req, res, next) => {
-  req.requestTime = Date.now();
-  next();
-};
-
-app.use(topMovies);
-app.use(requestTime);
-app.use(morgan('public'));
 
 // listen for requests
 app.listen(8080, () =>{
