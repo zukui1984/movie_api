@@ -85,6 +85,8 @@ app.get("/movies/:title", (req, res) => {
   let movie = movies.find((movie) => {
     return movies.title === req.params.title;
   });
+
+  
   if (movie) res.status(201).send(movie);
   else {
     res.status(404).send("Movie with the title" + req.params.title + " was not found.");
