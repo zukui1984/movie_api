@@ -6,26 +6,38 @@ const app = express();
 
 app.use(bodyParser.json());
 
-let topMovies = [
+let movies = [
   {
     id: 1,
     title: "Harry Potter and the Sorcerer's Stone",
     author: "J.K. Rowling",
+    director: "Chris Columbus",
+    genre: "Fantasy",
   },
   {
     id: 2,
     title: "Lord of the Rings",
     author: "J.R.R. Tolkien",
+    director: "Peter Jackson",
+    genre: "Scientific",
   },
   {
     id: 3,
     title: "Twilight",
     author: "Stephanie Meyer",
+    director: "Catherine Hard",
+    genre: "Horror",
   },
 ];
 
 app.use(express.static("public"));
 app.use(morgan("public"));
+
+// error handling
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something broke!");
+});
 
 // GET requests
 app.get("/", (req, res) => {
@@ -37,53 +49,45 @@ app.get("/documentation", (req, res) => {
 });
 
 app.get("/movies", (req, res) => {
-  res.json(topMovies);
+  res.json(movies);
 });
 
 // POST
 app.post("/movies", (req, res) => {
-  let topMovies = req.body;
+  let newMovie = req.body;
 
-  if (!topMovies.title) {
-    const title = 'Missing "title" in request body';
-    res.status(400).send(title);
+  if (!newMovie.title && !newMovie.author) {
+    const message = 'Missing "title" in request body';
+    res.status(400).send(message);
   } else {
-    topMovies.id = uuid.v4();
-    movies.push(topMovies);
-    res.status(201).send(topMovies);
+    newMovie.title = uuid.v4();
+    movies.push(newMovie);
+    res.status(201).send(newMovie);
+  }
+});
+
+
+// Responses & Status Codes
+app.put("/movies/:id/:author", (req, res) => {
+  let movie = movies.find((movie) =>
+   {return movie.id === req.params.id});
+
+  if (movie) {
+    movie.author[req.params.author] = parseInt(req.params.author);
+    res.status(201).send("Movie title" + req.params.author);
+  } else {
+    res.status(404).send("Movie with the id " + req.params.id + " was not found.");
   }
 });
 
 // Request Parameters
 app.get("/movies/:title", (req, res) => {
-  res.json(
-    movies.find((movie) => {
-      return movies.title === req.params.title;
-    })
-  );
-});
-
-// Responses & Status Codes
-app.put("/movies/:id/:title/:author", (req, res) => {
-  let movie = movies.find((id) => {
-    return movie.id === req.params.id;
+  let movie = movies.find((movie) => {
+    return movies.title === req.params.title;
   });
-
-  if (movie) {
-    movie.title[req.params.title] = parseInt(req.params.author);
-    res
-      .status(201)
-      .send(
-        req.params.id +
-          "Movie " +
-          req.params.title +
-          "directed by " +
-          req.params.author
-      );
-  } else {
-    res
-      .status(404)
-      .send("Movie with the name " + req.params.id + " was not found.");
+  if (movie) res.status(201).send(movie);
+  else {
+    res.status(404).send("Movie with the title" + req.params.title + " was not found.");
   }
 });
 
