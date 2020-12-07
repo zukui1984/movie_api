@@ -1,6 +1,7 @@
 const express = require("express");
-(bodyParser = require("body-parser")), (uuid = require("uuid"));
-morgan = require("morgan");
+const bodyParser = require("body-parser");
+const uuid = require("uuid");
+const morgan = require("morgan");
 
 const app = express();
 
@@ -66,8 +67,21 @@ app.post("/movies", (req, res) => {
   }
 });
 
+// DELETE
+app.delete('/movies/:id', (req, res) => {
+  let movie = movies.find((movie) => {return movie.id === req.params.id });
 
-// Responses & Status Codes
+  if (movie) {
+    movies = movies.filter((obj) => { return obj.id !== req.params.id });
+    res.status(201).send('Movie number ' + req.params.id + ' was deleted.');
+  }
+
+  res.send(movies);
+
+});
+
+
+// PUT
 app.put("/movies/:id/:author", (req, res) => {
   let movie = movies.find((movie) =>
    {return movie.id === req.params.id});
@@ -78,14 +92,15 @@ app.put("/movies/:id/:author", (req, res) => {
   } else {
     res.status(404).send("Movie with the id " + req.params.id + " was not found.");
   }
+
+
 });
 
 // Request Parameters
-app.get("/movies/:title", (req, res) => {
+app.get("/movies/:title/", (req, res) => {
   let movie = movies.find((movie) => {
     return movies.title === req.params.title;
   });
-
   
   if (movie) res.status(201).send(movie);
   else {
