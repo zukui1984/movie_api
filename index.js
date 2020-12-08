@@ -56,55 +56,59 @@ app.get("/movies", (req, res) => {
 // POST
 app.post("/movies", (req, res) => {
   let newMovie = req.body;
-
   if (!newMovie.title && !newMovie.author) {
-    const message = 'Missing "title" in request body';
+    const message = 'If there’s no title and if there’s no author';
     res.status(400).send(message);
   } else {
-    newMovie.title = uuid.v4();
+    newMovie.id = uuid.v4();
     movies.push(newMovie);
-    res.status(201).send(newMovie);
+    res.status(200).send(newMovie);
   }
 });
 
 // DELETE
-app.delete('/movies/:id', (req, res) => {
-  let movie = movies.find((movie) => {return movie.id === req.params.id });
+app.delete("/movies/:id", (req, res) => {
+  let movie = movies.find((movie) => {
+    console.log(typeof movie.id, typeof req.params.id);
+    return movie.id === req.params.id;
+  });
 
   if (movie) {
-    movies = movies.filter((obj) => { return obj.id !== req.params.id });
-    res.status(201).send('Movie number ' + req.params.id + ' was deleted.');
+    movies = movies.filter((obj) => {
+      return obj.id !== req.params.id;
+    });
+    res.status(201).send("Movie number " + req.params.id + " was deleted.");
   }
-
-  res.send(movies);
-
 });
-
 
 // PUT
 app.put("/movies/:id/:author", (req, res) => {
-  let movie = movies.find((movie) =>
-   {return movie.id === req.params.id});
+  let movie = movies.find((movie) => {
+    return movie.id === req.params.id;
+  });
 
   if (movie) {
     movie.author[req.params.author] = parseInt(req.params.author);
     res.status(201).send("Movie title" + req.params.author);
   } else {
-    res.status(404).send("Movie with the id " + req.params.id + " was not found.");
+    res
+      .status(404)
+      .send("Movie with the id " + req.params.id + " was not found.");
   }
-
-
 });
 
 // Request Parameters
 app.get("/movies/:title/", (req, res) => {
   let movie = movies.find((movie) => {
-    return movies.title === req.params.title;
+    console.log(movies, movies.title);
+    return movie.title === req.params.title;
   });
-  
+
   if (movie) res.status(201).send(movie);
   else {
-    res.status(404).send("Movie with the title" + req.params.title + " was not found.");
+    res
+      .status(404)
+      .send("Movie with the title" + req.params.title + " was not found.");
   }
 });
 
