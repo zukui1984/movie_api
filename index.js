@@ -114,15 +114,6 @@ app.get('/movies', (req, res) => {
     });
 });
 
-//Return by name
-app.get("/movies/:title", (req, res) => {
-  res.json(
-    movies.find((movie) => {
-      return movie.title === req.params.title;
-    })
-  );
-});
-
 //GET JSON - Specific files - A
 app.get("/movies/:title/", (req, res) => {
 Movies.findOne({ title: req.params.title})
@@ -171,21 +162,29 @@ app.get('/users', (req, res) => {
     });
 });
 
+// PUT - findOne and Update 
+app.put('/users/:Username', (req, res) => {
+  Users.findOneAndUpdate({ Username: req.params.Username }, { $set:
+    {
+      Username: req.body.Username,
+      Password: req.body.Password,
+      Email: req.body.Email,
+      Birthday: req.body.Birthday
+    }
+  },
+  { new: true },
+  (err, updatedUser) => {
+    if(err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    } else {
+      res.json(updatedUser);
+    }
+  });
+});
+
 
 // POST
-
-// ADD new movies
-// app.post("/movies", (req, res) => {
-//   let newMovie = req.body;
-//   if (!newMovie.title && !newMovie.author) {
-//     const message = "If there’s no title and if there’s no author";
-//     res.status(400).send(message);
-//   } else {
-//     newMovie.id = uuid.v4();
-//     movies.push(newMovie);
-//     res.status(200).send(newMovie);
-//   }
-// });
 
 //User to REGISTER
 app.post("/users", (req, res) => {
@@ -216,8 +215,6 @@ app.post("/users", (req, res) => {
 });
 
 // DELETE
-
-// Delete a user by username
 app.delete('/users/:username', (req, res) => {
   Users.findOneAndRemove({ Username: req.params.username })
     .then((user) => {
@@ -233,67 +230,7 @@ app.delete('/users/:username', (req, res) => {
     });
 });
 
-// app.delete("/users/:username", (req, res) => {
-//   let movie = movies.find((movie) => {
-//     console.log(typeof movie.director, typeof req.params.director);
-//     return movie.director === req.params.director;
-//   });
 
-//   if (movie) {
-//     movies = movies.filter((obj) => {
-//       return obj.director !== req.params.director;
-//     });
-//     res
-//       .status(201)
-//       .send("Movie number " + req.params.director + " was deleted.");
-//   } else {
-//     res
-//       .status(404)
-//       .send("Movie with the ranking number " + req.params.director);
-//   }
-// });
-
-// PUT
-app.put('/users/:username', (req, res) => {
-  Users.findOneAndUpdate({ Username: req.params.Username }, { $set:
-    {
-      Username: req.body.Username,
-      Password: req.body.Password,
-      Email: req.body.Email,
-      Birthday: req.body.Birthday
-    }
-  },
-  { new: true }, 
-  (err, updatedUser) => {
-    if(err) {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    } else {
-      res.json(updatedUser);
-    }
-  });
-});
-
-// PUT - findOne and Update 
-app.put('/users/:Username', (req, res) => {
-  Users.findOneAndUpdate({ Username: req.params.Username }, { $set:
-    {
-      Username: req.body.Username,
-      Password: req.body.Password,
-      Email: req.body.Email,
-      Birthday: req.body.Birthday
-    }
-  },
-  { new: true }, // This line makes sure that the updated document is returned
-  (err, updatedUser) => {
-    if(err) {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    } else {
-      res.json(updatedUser);
-    }
-  });
-});
 
 // listen for requests
 app.listen(8080, () => {

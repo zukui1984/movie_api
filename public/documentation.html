@@ -2,11 +2,112 @@
 <html lang="en" dir="ltr"></html>
     <head>
 <meta charset="utf-8">
-<title>Documentation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>myFlixDB Documentation</title>
     </head>
 
     <body>
-<h1>Documentation Page</h1>
-<p>Lorem ipsum dolor</p>
+<h1>myFlixDB Documentation</h1>
+<p>This site has access to information about movies, directors and genres</p>
+
+<section>
+<pre>
+    <code>
+      [{  
+        Title: "Batman",
+        Description: "The Dark Knight of Gotham City begins his war on crime with his first major enemy being Jack Napier, a criminal who becomes the clownishly homicidal Joker.",
+        Genre: {
+        Name: "Action",
+        Description: "a film genre in which the protagonist or protagonists are thrust into a series of events that typically violence, physical feats, rescues and frantic chases."
+               },
+        Director: {
+        Name: "Christopher Nolan",
+        Bio: "Famous director who directed Batman trilogy movies.",
+        Birthday: "1970-07-30"
+               },
+        ImagePath: "batman.png",
+        Featured: true
+    }]
+
+    [{
+        Title: "Avatar",
+        Description: "A paraplegic Marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home.",
+        Genre: {
+        Name: "Fantasy",
+        Description: "Films that belong to the fantasy genre with fantastic themes, usually magic, supernatural events, mythology, folklore, or exotic fantasy worlds."
+                },
+        Director: {
+        Name: "James Cameron",
+        Bio: "An American producer for movies Titanic and Avatar",
+        Birthday: "1954-08-16"
+                  },
+        ImagePath: "avatar.png",
+        Featured: true
+   }]
+
+   [{
+        Title: "Godfather",
+        Description: "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
+        Genre: {
+         Name: "Crime",
+         Description: "A film genre inspired by and analogous to the crime fiction literary genre."
+               },
+        Director: {
+        Name: "Martin Scorsese",
+        Bio: "An American director, producer, and screenwriter.",
+        Birthday: "1942-11-17"
+                 },
+        ImagePath: "godfather.png",
+        Featured: true
+   }]
+   
+    </code>
+</pre>
+
+<table>
+    <tr>
+        <th>Get list of all movies</th>
+        <th>/movies</th>
+        <th>GET</th>
+    </tr>
+
+    <tr>
+        <th>Allow find specific title</th>
+        <th>/movies/:title/</th>
+        <th>GET</th>
+    </tr>
+
+    <tr>
+        <th>Allow find specific genre</th>
+        <th>/genre/:name/</th>
+        <th>GET</th>
+    </tr>
+
+    <tr>
+        <th>Allow find specific director name</th>
+        <th>/director/:name/</th>
+        <th>GET</th>
+    </tr>
+
+    <tr>
+        <th>Allow user to update information</th>
+        <th>/director/:name/</th>
+        <th>PUT</th>
+    </tr>
+
+    <tr>
+        <th>Allow new user to register</th>
+        <th>/user</th>
+        <th>POST</th>
+    </tr>
+
+    <tr>
+        <th>Allow to remove from favorites</th>
+        <th>users/:username</th>
+        <th>DELETE</th>
+    </tr>
+</table>
+</section>
+
     </body>
 </html>
