@@ -1,8 +1,11 @@
 const bodyParser = require('body-parser'),
-express = require('express'),
-morgan = require('morgan'),
-mongoose = require('mongoose'),
-Models = require('./models.js');
+      express = require('express'),
+      morgan = require('morgan'),
+      mongoose = require('mongoose'),
+      Models = require('./models.js'),
+      cors = require('cors');
+
+const { check, validationResult } = require('express-validator');
 
 const Movies = Models.Movie;
 const Users = Models.User;
@@ -16,6 +19,7 @@ const app = express();
 app.use(morgan('public'));
 app.use(express.static("public"));
 app.use(bodyParser.json());
+app.use(cors());
 
 let auth = require('./auth')(app);
 
@@ -45,19 +49,19 @@ app.get(
 
 
 // JWT Movie - TITLE
-// app.get( '/movies/:title',
-//   passport.authenticate('jwt', { session: false }),
-//   (req, res) => {
-//     Movies.findOne({ title: req.params.title })
-//       .then((movies) => {
-//         res.status(201).json(movies);
-//       })
-//       .catch((error) => {
-//         console.error(error);
-//         res.status(500).send('Error: ' + error);
-//       });
-//   }
-// );
+app.get( '/movies/:title',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Movies.findOne({ title: req.params.title })
+      .then((movies) => {
+        res.status(201).json(movies);
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).send('Error: ' + error);
+      });
+  }
+);
 
 // Get all USERS
 app.get('/users',passport.authenticate('jwt', { session: false }), (req, res) => { 
@@ -100,20 +104,31 @@ app.put("/users/:Username",
 );
 
 // POST
-app.post('/users', (req, res) => {
+app.post('/users', [ 
+ check('Username', 'Username is required').isLength({min: 5}),
+ check('Username', 'Username contains non alphanumeric characters - not allowed').isAlphanumeric(),
+check('Password', 'Password is required').not().isEmpty(),
+check('Email', 'Email does not appear to be valid').isEmail()
+],(req, res) => {
+
+  // check the validation object for errors 
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+  let hashedPassword = Users.hashedPassword(req.body.Password);
   Users.findOne({ Username: req.body.Username }).then((user) => {
     if (user) {
-      return res.status(400).send(req.body.Username + 'already exists');
-    } else {
+      return res.status(400).send(req.body.Username + ' already exists');
+    } else { 
       Users.create({
         Username: req.body.Username,
-        Password: req.body.Password,
+        Password: hashedPassword,
         Email: req.body.Email,
         Birthday: req.body.Birthday,
       })
-        .then((user) => {
-          res.status(201).json(user);
-        })
+        .then((user) => {res.status(201).json(user) })
         .catch((error) => {
           console.error(error);
           res.status(500).send('Error: ' + error);
@@ -146,6 +161,7 @@ app.use((err, req, res, next) => {
 });
 
 // listen for requests
-app.listen(8080, () => {
-  console.log("Your app is listening on port 8080.");
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0.0',() => {
+ console.log('Listening on Port ' + port);
 });
