@@ -16,7 +16,6 @@ mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifie
 
 const app = express();
 
-
 app.use(morgan('public'));
 app.use(express.static("public"));
 app.use(bodyParser.json());
@@ -28,7 +27,7 @@ const passport = require('passport');
 require('./passport');
 
 // GET requests
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   res.send("Successful GET request returning data on all movies");
 });
 
