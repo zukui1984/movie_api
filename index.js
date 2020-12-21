@@ -16,7 +16,7 @@ mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifie
 
 const app = express();
 
-app.use(morgan('public'));
+app.use(morgan('common'));
 app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(cors());
@@ -157,10 +157,10 @@ app.delete('/users/:Username', passport.authenticate('jwt',{session: false}), (r
 });
 
 // error handling
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send("Something broke!");
-});
+// app.use((err, req, res, next) => {
+//   console.error(err.stack);
+//   res.status(500).send("Something broke!");
+// });
 
 // listen for requests
 const port = process.env.PORT || 8080;
