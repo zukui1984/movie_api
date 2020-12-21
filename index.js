@@ -5,8 +5,6 @@ const bodyParser = require('body-parser'),
       Models = require('./models.js'),
       cors = require('cors');
 
-
-
 const Movies = Models.Movie;
 const Users = Models.User;
 
@@ -66,7 +64,7 @@ app.get( '/movies/:title',
 );
 
 // Get all USERS
-app.get('/users',passport.authenticate('jwt', { session: false }), (req, res) => { 
+app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => { 
   Users.find().then((users) => {
         res.status(201).json(users);
       })
