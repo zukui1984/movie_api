@@ -8,9 +8,8 @@ const bodyParser = require('body-parser'),
 const Movies = Models.Movie;
 const Users = Models.User;
 
-// To connect Mongoose
 // mongoose.connect('mongodb://localhost:27017/myFlixDB', {useNewUrlParser: true, useUnifiedTopology: true});
-mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const app = express();
 
@@ -117,24 +116,31 @@ check('Email', 'Email does not appear to be valid').isEmail()
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
   }
-  let hashedPassword = Users.hashedPassword(req.body.Password);
-  Users.findOne({ Username: req.body.Username }).then((user) => {
-    if (user) {
-      return res.status(400).send(req.body.Username + ' already exists');
-    } else { 
-      Users.create({
-        Username: req.body.Username,
-        Password: hashedPassword,
-        Email: req.body.Email,
-        Birthday: req.body.Birthday,
-      })
-        .then((user) => {res.status(201).json(user) })
+
+  let hashedPassword = Users.hashPassword (req.body.Password);
+  Users.findOne({ Username: req.body.Username })
+    .then((user) => {
+      if (user) {
+        return res.status(400).send(req.body.Username + ' already exists');
+      } else {
+        Users
+          .create({
+            Username: req.body.Username,
+            Password: hashedPassword,
+            Email: req.body.Email,
+            Birthday: req.body.Birthday
+          })
+          .then((user) =>{res.json(user) })
         .catch((error) => {
           console.error(error);
           res.status(500).send('Error: ' + error);
         });
-    }
-  });
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send('Error: ' + error);
+    });
 });
 
 
