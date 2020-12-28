@@ -32,9 +32,7 @@ app.get('/', (req, res) => {
 
 // JWT PASSPORT AUTHENTICATION
 app.get(
-  '/movies',
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
+  '/movies', (req, res) => {
     Movies.find()
       .then((movies) => {
         res.status(201).json(movies);
@@ -48,9 +46,7 @@ app.get(
 
 
 // JWT Movie - TITLE
-app.get( '/movies/:title',
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
+app.get( '/movies/:title',  (req, res) => {
     Movies.findOne({ title: req.params.title })
       .then((movies) => {
         res.status(201).json(movies);
@@ -63,7 +59,7 @@ app.get( '/movies/:title',
 );
 
 // Get all USERS
-app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => { 
+app.get('/users', (req, res) => { 
   Users.find().then((users) => {
         res.status(201).json(users);
       })
@@ -76,9 +72,7 @@ app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) =
 
 
 // PUT
-app.put("/users/:Username",
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
+app.put("/users/:Username", (req, res) => {
     Users.findOneAndUpdate(
       { Username: req.params.Username },
       {
@@ -145,7 +139,7 @@ check('Email', 'Email does not appear to be valid').isEmail()
 
 
 // DELETE
-app.delete('/users/:Username', passport.authenticate('jwt',{session: false}), (req, res) => {
+app.delete('/users/:Username', (req, res) => {
   Users.findOneAndRemove({ Username: req.params.Username })
     .then((user) => {
       if (!user) {
