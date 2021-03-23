@@ -1,3 +1,6 @@
+/**
+ * Imports all modules needed for the api
+ */
 const bodyParser = require("body-parser"),
   express = require("express"),
   morgan = require("morgan"),
@@ -8,12 +11,19 @@ const bodyParser = require("body-parser"),
 const Movies = Models.Movie;
 const Users = Models.User;
 
+
+/**
+ * Connects the MongoDB database
+ */
 // mongoose.connect('mongodb://localhost:27017/myFlixDB', {useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
+/**
+ * Allows the use of express
+ */
 const app = express();
 
 app.use(morgan("common"));
@@ -65,6 +75,9 @@ app.get(
   }
 );
 
+/**
+ * api call to GET all users data
+ */
 // Get all USERS
 app.get(
   "/users",
@@ -81,6 +94,9 @@ app.get(
   }
 );
 
+/**
+ * api call to update user data by username
+ */
 // PUT
 app.put(
   "/users/:Username",
@@ -109,6 +125,9 @@ app.put(
   }
 );
 
+/**
+ * api call to post a new movie to a user's favourite list
+ */
 // POST
 app.post(
   "/users",
@@ -201,6 +220,9 @@ app.delete("/users/:Username/movies/:MovieID", passport.authenticate("jwt", { se
   });
 });
 
+/**
+ * 
+ */
 app.get("/users/:Username", function (req, res) {
   Users.findOne({ Username: req.params.Username })
     .then(function (user) {
@@ -212,12 +234,10 @@ app.get("/users/:Username", function (req, res) {
     });
 });
 
-// error handling
-// app.use((err, req, res, next) => {
-//   console.error(err.stack);
-//   res.status(500).send("Something broke!");
-// });
-
+/**
+ * Listens for requests and looks for a pre-configured port number in the environment variable
+ * If nothing is found it sets the port to 8080
+ */
 // listen for requests
 const port = process.env.PORT || 8080;
 app.listen(port, "0.0.0.0", () => {

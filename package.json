@@ -22,7 +22,9 @@
     "passport-local": "^1.0.0",
     "uuid": "^8.3.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "typedoc": "^0.20.33"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zukui1984/movie_api.git"

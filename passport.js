@@ -1,3 +1,6 @@
+/**
+ * Imports all modules
+ */
 const passport = require('passport'),
   LocalStrategy = require('passport-local').Strategy,
   Models = require('./models.js'),
@@ -7,6 +10,9 @@ let Users = Models.User,
   JWTStrategy = passportJWT.Strategy,
   ExtractJWT = passportJWT.ExtractJwt;
 
+/**
+ * Defines basic HTTP authentication for login requests
+ */
   passport.use(new LocalStrategy({
     usernameField: 'Username',
     passwordField: 'Password'
@@ -33,6 +39,9 @@ let Users = Models.User,
     });
   }));
   
+/**
+ * Allows users to be authenticated based on the JSON Web Token submitted alongside their request
+ */
   passport.use(new JWTStrategy({
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
     secretOrKey: 'your_jwt_secret'
