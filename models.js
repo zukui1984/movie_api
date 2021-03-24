@@ -32,8 +32,8 @@ let userSchema = mongoose.Schema({
 });
 
 /**
- * 
- * @param {*} user password 
+ * hash user password saved in database
+ * @param {*} password 
  * @returns 
  */
 userSchema.statics.hashPassword = (password) => {
@@ -41,8 +41,8 @@ userSchema.statics.hashPassword = (password) => {
 };
 
 /**
- * 
- * @param {*} login password 
+ * comparing user login password with hashed saved password
+ * @param {*} password 
  * @returns 
  */
 userSchema.methods.validatePassword = function(password) {
