@@ -31,20 +31,20 @@ let userSchema = mongoose.Schema({
   FavoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }]
 });
 
-/**
- * hash user password saved in database
- * @param {*} password 
- * @returns 
- */
+// /**
+//  * hash user password saved in database
+//  * @param {*} password 
+//  * @returns 
+//  */
 userSchema.statics.hashPassword = (password) => {
   return bcrypt.hashSync(password, 10);
 };
 
-/**
- * comparing user login password with hashed saved password
- * @param {*} password 
- * @returns 
- */
+// /**
+//  * comparing user login password with hashed saved password
+//  * @param {*} password 
+//  * @returns 
+//  */
 userSchema.methods.validatePassword = function(password) {
   return bcrypt.compareSync (password, this.Password);
 };
